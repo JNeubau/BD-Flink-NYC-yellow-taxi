@@ -1,25 +1,29 @@
-# Sprawozdanie - Apache Kafka - NYC Yellow Taxi 
+# Repoer - Apache Kafka - NYC Yellow Taxi 
 Joanna Neubauer 148111
 
-## 1. ściągnij/wrzuć wsyzystkie pliki na maszynę
+## 1. Download all necessary data
+```
+git clone https://github.com/JNeubau/BD-Flink-NYC-yellow-taxi.git
+hadoop fs -copyToLocal gs://bucket-1-jn/proj2
+```
 
-## 2. dodaj uprawnienia skryptom 
+## 2. Add exec permissions to scripts
 ```
 chmod +x *.sh
 ```
 
 ## 3. Run the setup scripts
-### Assign enviromental variables
+### Assign environmental variables
 ```
 ./environ.sh
 ```
 
-### Create kafka topics
+### Create Kafka topics
 ```
 ./create-topics.sh
 ```
 
-### Turn on listining terminal
+### Turn on listener terminal
 ```
 ./kafka-reciver.sh
 ```
