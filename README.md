@@ -9,12 +9,22 @@ chmod +x *.sh
 ```
 
 ## 3. Run the setup scripts
-### Assign enviromental variables:
+### Assign enviromental variables
 ```
 ./environ.sh
 ```
 
-### Create kafka topics:
+### Create kafka topics
 ```
 ./create-topics.sh
+```
+
+### Turn on listining terminal
+```
+./kafka-reciver.sh
+```
+
+### Turn on sender terminal
+```
+./kafka-sender.sh
 ```
