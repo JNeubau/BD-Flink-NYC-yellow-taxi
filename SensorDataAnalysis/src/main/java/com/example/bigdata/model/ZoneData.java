@@ -13,7 +13,7 @@ public class ZoneData {
 
     // Constructors
     public ZoneData() {
-        this(-1L, "", "", "");
+        this(0L, "", "", "");
     }
 
     public ZoneData(Long locationID, String borough, String zone,

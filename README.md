@@ -26,7 +26,7 @@ chmod +x *.sh
 ```
 
 ## Run the setup scripts
-## Download all necessary data
+### Download all necessary data
 ```
 ./setup.sh
 ```

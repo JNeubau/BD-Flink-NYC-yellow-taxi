@@ -1,6 +1,9 @@
 package com.example.bigdata.model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 public class TaxiData {
     // identyfikator przejazdu
@@ -8,7 +11,7 @@ public class TaxiData {
     //czy rozpoczęcie (0) czy zakończenie (1) przejazdu
     private int start_stop;
     // etykieta czasowa
-    private ZonedDateTime timestamp;
+    private Date timestamp;
     // identyfikator strefy taksówek
     private Long locationID;
     // liczba pasażerów
@@ -23,24 +26,19 @@ public class TaxiData {
     private int VendorID;
 
 
-    // Constructors
-    public TaxiData() {
-        this(-1L, -1, ZonedDateTime.now(), -1L, -1, 0.0, -1, 0.0, -1);
-    }
-
-    public TaxiData(Long tripID, int start_stop, ZonedDateTime timestamp, Long locationID,
-                    int passenger_count, Double trip_distance, int payment_type,
-                    Double amount, int VendorID) {
-        this.tripID = tripID;
-        this.start_stop = start_stop;
-        this.timestamp = timestamp;
-        this.locationID = locationID;
-        this.passenger_count = passenger_count;
-        this.trip_distance = trip_distance;
-        this.payment_type = payment_type;
-        this.amount = amount;
-        this.VendorID = VendorID;
-    }
+//    public TaxiData(Long tripID, int start_stop, ZonedDateTime timestamp, Long locationID,
+//                    int passenger_count, Double trip_distance, int payment_type,
+//                    Double amount, int VendorID) {
+//        this.tripID = tripID;
+//        this.start_stop = start_stop;
+//        this.timestamp = timestamp;
+//        this.locationID = locationID;
+//        this.passenger_count = passenger_count;
+//        this.trip_distance = trip_distance;
+//        this.payment_type = payment_type;
+//        this.amount = amount;
+//        this.VendorID = VendorID;
+//    }
 
     public Long getTripID() {
         return tripID;
@@ -58,11 +56,11 @@ public class TaxiData {
         this.start_stop = start_stop;
     }
 
-    public ZonedDateTime getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(ZonedDateTime timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -127,5 +125,25 @@ public class TaxiData {
                 ", amount=" + amount +
                 ", VendorID=" + VendorID +
                 '}';
+    }
+
+    public static TaxiData fromString(String line) throws ParseException {
+        String[] parts = line.split(",");
+        if (parts.length == 9) {
+            TaxiData taxiEvent = new TaxiData();
+            taxiEvent.setTripID(Long.parseLong(parts[0]));
+            taxiEvent.setStart_stop(Integer.parseInt(parts[1]));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            taxiEvent.setTimestamp(dateFormat.parse(parts[2]));
+            taxiEvent.setLocationID(Long.parseLong(parts[3]));
+            taxiEvent.setPassenger_count(Integer.parseInt(parts[4]));
+            taxiEvent.setTrip_distance(Double.parseDouble(parts[5]));
+            taxiEvent.setPayment_type(Integer.parseInt(parts[6]));
+            taxiEvent.setAmount(Double.parseDouble(parts[7]));
+            taxiEvent.setVendorID(Integer.parseInt(parts[8]));
+            return taxiEvent;
+        } else {
+            throw new IllegalArgumentException("Malformed line: " + line);
+        }
     }
 }
