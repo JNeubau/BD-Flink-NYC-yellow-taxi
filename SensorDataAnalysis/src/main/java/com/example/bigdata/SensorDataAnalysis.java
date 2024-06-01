@@ -21,7 +21,6 @@ public class SensorDataAnalysis {
         ParameterTool propertiesFromFile = ParameterTool.fromPropertiesFile("src/main/resources/flink.properties");
         ParameterTool propertiesFromArgs = ParameterTool.fromArgs(args);
         ParameterTool properties = propertiesFromFile.mergeWith(propertiesFromArgs);
-        System.out.println(properties.getProperties());
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
@@ -39,14 +38,14 @@ public class SensorDataAnalysis {
 //                "33,speed,1591531561000",
 //                "26,temperature,1591531561000");
 
-//        DataStream<String> zoneInputStream = env.
-//                fromSource(Connectors.getZoneSource(properties),
-//                        WatermarkStrategy.noWatermarks(), "ZoneData");
-//
-//        DataStream<ZoneData> zoneDataDS = zoneInputStream.map((MapFunction<String, String[]>) txt -> txt.split(",") )
-//                .filter(array -> array.length == 4)
-//                .filter(array -> array[0].matches("\\d+"))
-//                .map(array -> new ZoneData(Long.parseLong(array[0]), array[1], array[2], array[3]));
+        DataStream<String> zoneInputStream = env.
+                fromSource(Connectors.getZoneSource(properties),
+                        WatermarkStrategy.noWatermarks(), "ZoneData");
+
+        DataStream<ZoneData> zoneDataDS = zoneInputStream.map((MapFunction<String, String[]>) txt -> txt.split(",") )
+                .filter(array -> array.length == 4)
+                .filter(array -> array[0].matches("\\d+"))
+                .map(array -> new ZoneData(Long.parseLong(array[0]), array[1], array[2], array[3]));
 
         DataStream<String> taxiInputStream = env.
                 fromSource(Connectors.getTaxiSource(properties),
@@ -55,9 +54,7 @@ public class SensorDataAnalysis {
         DataStream<TaxiData> taxiDataDS = taxiInputStream.map((MapFunction<String, String[]>) txt -> txt.split(",") )
                 .filter(array -> array.length == 9)
                 .filter(array -> array[0].matches("\\d+") && array[1].matches("\\d+")
-                        && array[3].matches("\\d+") && array[4].matches("\\d+")
-                        && array[5].matches("\\d+") && array[6].matches("\\d+")
-                        && array[7].matches("\\d+") && array[8].matches("\\d+"))
+                        && array[3].matches("\\d+") && array[4].matches("\\d+"))
                 .map(array -> new TaxiData(Long.parseLong(array[0]), Integer.parseInt(array[1]),
                         ZonedDateTime.parse(array[2]), Long.parseLong(array[3]), Integer.parseInt(array[4]),
                         Double.parseDouble(array[5]), Integer.parseInt(array[6]), Double.parseDouble(array[7]),
@@ -73,7 +70,7 @@ public class SensorDataAnalysis {
 //        KeyedStream<SensorDataAgg, String> dataKeyedBySensor = sensorDataExtDS.keyBy(sd -> sd.getSensor());
 //        DataStream<SensorDataAgg> result = dataKeyedBySensor.reduce(new MyReduceFunction());
 
-//        zoneDataDS.print();
+        zoneDataDS.print();
         taxiDataDS.print();
 //        result.print();
 

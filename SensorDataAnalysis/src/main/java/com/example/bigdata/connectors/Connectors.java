@@ -12,8 +12,8 @@ public class Connectors {
         return FileSource
                 .forRecordStreamFormat(new TextLineInputFormat(),
                         new Path(properties.getRequired("fileInputTaxi.uri")))
-//                .monitorContinuously(Duration.ofMillis(
-//                        Long.parseLong(properties.getRequired("fileInput.interval"))))
+                .monitorContinuously(Duration.ofMillis(
+                        Long.parseLong(properties.getRequired("fileInputTaxi.interval"))))
                 .build();
     }
 
