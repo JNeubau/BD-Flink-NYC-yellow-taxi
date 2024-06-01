@@ -14,6 +14,11 @@ gcloud dataproc clusters create ${CLUSTER_NAME} \
 gs://goog-dataproc-initialization-actions-${REGION}/kafka/kafka.sh
 ```
 
+## Download repository code
+```
+git clone https://github.com/JNeubau/BD-Flink-NYC-yellow-taxi.git
+```
+
 ## Add exec permissions to scripts
 ```
 chmod +x *.sh
