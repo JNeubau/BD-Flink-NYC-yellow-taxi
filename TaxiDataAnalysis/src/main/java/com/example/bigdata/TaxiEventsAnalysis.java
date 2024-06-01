@@ -1,20 +1,19 @@
 package com.example.bigdata;
 
 import com.example.bigdata.connectors.TaxiEventSource;
-import com.example.bigdata.model.ResultData;
 import com.example.bigdata.model.TaxiEvent;
 import com.example.bigdata.model.TaxiLocEvent;
-import com.example.bigdata.tools.DetInfoProcessWindowFunction;
 import com.example.bigdata.tools.EnrichWithLocData;
-import com.example.bigdata.tools.GetFinalResultWindowFunction;
-import com.example.bigdata.tools.TaxiLocAggregator;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.java.utils.ParameterTool;
 
+import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.HashMap;
 
 public class TaxiEventsAnalysis {
     public static void main(String[] args) throws Exception {
@@ -27,16 +26,17 @@ public class TaxiEventsAnalysis {
 
         /* TODO: Utwórz źródłowy strumień. Skorzystaj z klasy TaxiEventSource.
                  Załóż, że dane są uporządkowane względem znaczników czasowych
-
-        DataStream<TaxiEvent> taxiEventsDS = */
-
+*/
+        DataStream<TaxiEvent> taxiEventsDS = env.addSource(new TaxiEventSource(properties)).name( "taxi" );
 
         /* TODO: W strumieniu źródłowym brak jest informacji na temat dzielnicy,
                  jest ona dostępna w oddzielnym statycznym zbiorze danych.
                  Uzupełnij dane w strumieniu o nazwę dzielnicy.
                  Przy okazji pozbądź się danych nieistotnych z punktu widzenia celu przetwarzania
+*/
 
-        DataStream<TaxiLocEvent> taxiLocEventsDS = */
+        DataStream<TaxiLocEvent> taxiLocEventsDS = taxiEventsDS
+                .map(new EnrichWithLocData(properties.getRequired("zoneFile.path")));
 
 
         /* TODO: Mamy już komplet potrzebnych informacji do wykonania naszych obliczeń.
@@ -52,9 +52,10 @@ public class TaxiEventsAnalysis {
         DataStream<ResultData> taxiLocStatsDS = */
 
 
-        /* TODO: Podłącz ujście. Wystarczy, że będziesz generował na dane na standardowe wyjście.
+        /* TODO: Podłącz ujście. Wystarczy, że będziesz generował na dane na standardowe wyjście. */
 
-        taxiLocStatsDS.print(); */
+        taxiLocEventsDS.print();
+//        taxiLocStatsDS.print();
 
         env.execute("Taxi Events Analysis");
     }

@@ -21,7 +21,7 @@ public class TaxiEventSource implements SourceFunction<TaxiEvent> {
     }
 
     public TaxiEventSource(ParameterTool properties) {
-        this.directoryPath = properties.get("taxiEvents.directoryPath");
+        this.directoryPath = properties.get("taxiData.directoryPath");
         this.elementDelayMillis = Long.parseLong(properties.get("taxiEvents.elementDelayMillis"));
         this.maxElements = Integer.parseInt(properties.get("taxiEvents.maxElements"));
     }
