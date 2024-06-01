@@ -17,6 +17,7 @@ gs://goog-dataproc-initialization-actions-${REGION}/kafka/kafka.sh
 ## Download repository code
 ```
 git clone https://github.com/JNeubau/BD-Flink-NYC-yellow-taxi.git
+cd BD-Flink-NYC-yellow-taxi/
 ```
 
 ## Add exec permissions to scripts
