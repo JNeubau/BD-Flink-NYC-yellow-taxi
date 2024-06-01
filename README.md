@@ -43,10 +43,10 @@ chmod +x *.sh
 
 ### Turn on listener terminal
 ```
-./kafka-reciver.sh
+./reciver-kafka.sh
 ```
 
 ### Turn on sender terminal
 ```
-./kafka-sender.sh
+./sender-kafka.sh
 ```
