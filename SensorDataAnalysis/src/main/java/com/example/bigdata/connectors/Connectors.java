@@ -8,12 +8,19 @@ import org.apache.flink.core.fs.Path;
 import java.time.Duration;
 
 public class Connectors {
-    public static FileSource<String> getFileSource(ParameterTool properties) {
+    public static FileSource<String> getTaxiSource(ParameterTool properties) {
         return FileSource
                 .forRecordStreamFormat(new TextLineInputFormat(),
-                        new Path(properties.getRequired("fileInput.uri")))
-                .monitorContinuously(Duration.ofMillis(
-                        Long.parseLong(properties.getRequired("fileInput.interval"))))
+                        new Path(properties.getRequired("fileInputTaxi.uri")))
+//                .monitorContinuously(Duration.ofMillis(
+//                        Long.parseLong(properties.getRequired("fileInput.interval"))))
+                .build();
+    }
+
+    public static FileSource<String> getZoneSource(ParameterTool properties) {
+        return FileSource
+                .forRecordStreamFormat(new TextLineInputFormat(),
+                        new Path(properties.getRequired("fileInputZone.uri")))
                 .build();
     }
 
