@@ -1,5 +1,6 @@
 package com.example.bigdata;
 
+import com.example.bigdata.connectors.SqlConnector;
 import com.example.bigdata.connectors.TaxiEventSource;
 import com.example.bigdata.model.ResultData;
 import com.example.bigdata.model.TaxiEvent;
@@ -63,9 +64,11 @@ public class TaxiEventsAnalysis {
                 .keyBy(TaxiLocEvent::getBorough)
                 .window(EventTimeSessionWindows.withGap(Time.days(1)))
                 .aggregate(new TaxiLocAggregator(), new GetFinalResultWindowFunction());
+//                .addSink(Connectors.getMySQLSink(properties));
 
-
-        taxiLocStatsDS.print();
+//        taxiEventsDS.print();
+//        taxiLocStatsDS.print();
+        taxiLocStatsDS.addSink(SqlConnector.getMySQLSink(properties));
 
         env.execute("Taxi Events Analysis");
     }

@@ -1,0 +1,13 @@
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\tools\DetInfoProcessWindowFunction.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\model\ResultData.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\connectors\SqlConnector.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\model\TaxiEvent.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\model\TaxiLocAccumulator.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\tools\GetFinalResultWindowFunction.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\connectors\TaxiEventSource.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\model\LocData.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\model\TaxiLocEvent.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\model\TaxiLocStats.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\tools\EnrichWithLocData.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\TaxiEventsAnalysis.java
+C:\Users\neuba\Documents\semestr8\Przetwarzanie BigData\laby\BD-Flink-NYC-yellow-taxi\TaxiDataAnalysis\src\main\java\com\example\bigdata\tools\TaxiLocAggregator.java
