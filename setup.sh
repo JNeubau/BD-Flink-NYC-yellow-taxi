@@ -25,6 +25,11 @@ kafka-topics.sh --bootstrap-server ${CLUSTER_NAME}-w-1:9092 --list
 echo ""
 echo ""
 
+echo "Delete files"
+rm -rf "$INPUT_DATA_LOC_FILE"
+rm -rf "$INPUT_DATA_DIR_TAXI"
+rm -rf "$INPUT_DATA_DIR_TAXI.zip"
+
 echo "Download csv from bucket"
 hadoop fs -copyToLocal gs://${INPUT_DATA_LOCATION}/taxi_zone_lookup.csv "$INPUT_DATA_LOC_FILE" || exit
 hadoop fs -copyToLocal gs://${INPUT_DATA_LOCATION}/${INPUT_DATA_DIR_TAXI} "$INPUT_DATA_DIR_TAXI.zip" || exit
