@@ -64,9 +64,9 @@ docker compose down
 docker compose up -d --wait
 
 echo "Preparing mysql schema"
-docker exec -it mymysql cqlsh -e "CREATE KEYSPACE IF NOT EXISTS crime_data WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
-                                    USE crime_data;
-                                    CREATE TABLE IF NOT EXISTS taxi_events_sink
+docer exec -it mymysql mysql -uroot -ppassword <<< "mysqladmin GRANT ALL ON streamdb.* TO 'user'";
+
+docker exec -it mymysql --user=user -ppassword -e "CREATE TABLE IF NOT EXISTS taxi_events_sink
                                     (
                                         borough varchar(255),
                                         from_val varchar(50),
