@@ -24,6 +24,7 @@ cd BD-Flink-NYC-yellow-taxi/
 ## Add exec permissions to scripts
 ```
 chmod +x *.sh
+chmod +x *.yml
 ```
 
 ## Run the setup scripts

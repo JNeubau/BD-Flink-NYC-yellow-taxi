@@ -31,7 +31,7 @@ hadoop fs -copyToLocal gs://${INPUT_DATA_LOCATION}/${INPUT_DATA_DIR_TAXI} "$INPU
 echo ""
 
 echo "unzip"
-unzip -j "$INPUT_DATA_DIR_TAXI.zip" -d "$INPUT_DATA_DIR_TAXI" || exit
+# unzip -j "$INPUT_DATA_DIR_TAXI.zip" -d "$INPUT_DATA_DIR_TAXI" || exit
 echo ""
 
 echo "Downloading dependencies"
