@@ -16,3 +16,6 @@ export HEADER_LENGTH=1
 
 export HADOOP_CONF_DIR=/etc/hadoop/conf
 export HADOOP_CLASSPATH=`hadoop classpath`
+export BOOTSTRAP_SERVERS="$CLUSTER_NAME-w-0:9092"
+export CASSANDRA_HOST="$CLUSTER_NAME-m"
+export CASSANDRA_PORT="9042"

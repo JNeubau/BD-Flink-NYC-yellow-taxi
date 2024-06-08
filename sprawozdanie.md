@@ -1,51 +1,36 @@
-# Sprawozdanie - Apache Kafka - NYC Yellow Taxi 
+# Sprawozdanie - Apache Flink - NYC Yellow Taxi 
 
-# KafkaProducer
-
-## Uruchomienie
-
-#### Argumenty
-1. inputDir
-2. sleepTimee
-3. topicName
-4. headerLength
-5. bootstrapServers
-
-### Komenda
-temat sie nazywa "test"
-folder z danymi nazywa się "data"
-
-Utwórz temat kafki
+## Cluster
 ```
-kafka-topics.sh --bootstrap-server ${CLUSTER_NAME}-w-1:9092 --create \
---replication-factor 1 --partitions 1 --topic test
-```
-Sprawdź dane kafki
-```
-- odczytaj port Zookeeper:
-cat /usr/lib/kafka/config/server.properties | grep zookeeper.connect
-
-- port nasłuchujący:
-cat /usr/lib/kafka/config/server.properties | grep listeners
+gcloud dataproc clusters create ${CLUSTER_NAME} \
+--enable-component-gateway --region ${REGION} --subnet default \
+--master-machine-type n1-standard-4 --master-boot-disk-size 50 \
+--num-workers 2 --worker-machine-type n1-standard-2 --worker-boot-disk-size 50 \
+--image-version 2.1-debian11 --optional-components ZOOKEEPER,DOCKER,FLINK \
+--project ${PROJECT_ID} --max-age=3h \
+--metadata "run-on-master=true" \
+--initialization-actions gs://goog-dataproc-initialization-actions-${REGION}/kafka/kafka.sh
 ```
 
-sprawdź dostępne tematy kafki
-```
-CLUSTER_NAME=$(/usr/share/google/get_metadata_value attributes/dataproc-cluster-name)
-kafka-topics.sh --bootstrap-server ${CLUSTER_NAME}-w-1:9092 --list
-```
-
-## Terminal odbiorczy
-```
-CLUSTER_NAME=$(/usr/share/google/get_metadata_value attributes/dataproc-cluster-name)
-kafka-console-consumer.sh --group my-consumer-group \
---bootstrap-server ${CLUSTER_NAME}-w-0:9092 \
---topic test --from-beginning
-```
+## Prepare the environment
+1. Download package from [https://github.com/JNeubau/BD-Flink-NYC-yellow-taxi.git]().
+Unpack the files.
+2. Make sure that source data is in your bucket in with the original name.
+3. Execute``` chmod +x *.sh ```
+4. Change vaiables in `environ.sh` file to match your data
+- `INPUT_DATA_LOCATION` - your bucket
+- `INPUT_DATA_LOC_FILE` - static input data
+- `INPUT_DATA_DIR_TAXI` - folder with events
 
 ```
-CLUSTER_NAME=$(/usr/share/google/get_metadata_value attributes/dataproc-cluster-name)
-java -cp /usr/lib/kafka/libs/*:KafkaProducer.jar \
-com.example.bigdata.TestProducer \
-data 15 test 0 ${CLUSTER_NAME}-w-0:9092
+git clone https://github.com/JNeubau/BD-Flink-NYC-yellow-taxi.git
+cd BD-Flink-NYC-yellow-taxi/
+mv * ../
+chmod +x *.sh
+```
+5. Run the  `setup.sh` script to prepare environment
+6. In one of the terminal runthe `sender-kafka_taxi.sh` script to start sending data via kafka producer.
+```
+./setup.sh
+./sender-kafka_taxi.sh
 ```
