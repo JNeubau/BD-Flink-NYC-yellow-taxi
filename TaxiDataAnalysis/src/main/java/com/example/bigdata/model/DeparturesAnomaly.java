@@ -74,8 +74,8 @@ public class DeparturesAnomaly {
                 "borough='" + borough + '\'' +
                 ", from=" + from +
                 ", to=" + to +
-                ", totalPassengersDep=" + totalPassengersDep +
-                ", totalPassengersArr=" + totalPassengersArr +
+                ", totalPassengersDeparted=" + totalPassengersDep +
+                ", totalPassengersArrived=" + totalPassengersArr +
                 ", difference=" + difference +
                 '}';
     }

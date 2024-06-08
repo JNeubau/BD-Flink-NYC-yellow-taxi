@@ -1,5 +1,6 @@
 package com.example.bigdata;
 
+import com.example.bigdata.connectors.Connectors;
 import com.example.bigdata.connectors.TaxiEventSource;
 import com.example.bigdata.model.*;
 import com.example.bigdata.tools.EnrichWithLocData;
@@ -7,6 +8,7 @@ import com.example.bigdata.tools.GetAnomalyWindowFunction;
 import com.example.bigdata.tools.GetFinalResultWindowFunction;
 import com.example.bigdata.tools.TaxiLocAggregator;
 import com.example.bigdata.tools.EveryEventTimeTrigger;
+
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -15,12 +17,10 @@ import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
 
-//import java.sql.Types;
 import java.time.Duration;
 
 public class TaxiEventsAnalysis {
@@ -71,7 +71,7 @@ public class TaxiEventsAnalysis {
                  - liczba pasażerów obsłużona dla przyjazdów
                  - liczba pasażerów obsłużona dla wyjazdów
 */
-        String delay = "C";
+        String delay = properties.getRequired("DELAY_VERSION");
 
         DataStream<ResultData> taxiLocStatsDS = taxiLocEventsDS
                 .keyBy(TaxiLocEvent::getBorough)
@@ -95,10 +95,11 @@ public class TaxiEventsAnalysis {
 
         // print to console
 //        taxiLocStatsDS.print();
-        anomalyOutput.print();
+//        anomalyOutput.print();
 
         // save to database
-//        taxiLocStatsDS.addSink(SqlConnector.getMySQLSink(properties));
+        taxiLocStatsDS.addSink(Connectors.getMySQLSink(properties));
+        anomalyOutput.map(DeparturesAnomaly::toString).sinkTo(Connectors.getAnomalySink(properties));
 
         env.execute("Taxi Events Analysis");
     }
