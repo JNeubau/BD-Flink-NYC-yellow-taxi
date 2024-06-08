@@ -64,7 +64,7 @@ docker compose down
 docker compose up -d --wait
 
 echo "Preparing mysql schema"
-docer exec -it mymysql mysql -uroot -ppassword <<< "mysqladmin GRANT ALL ON streamdb.* TO 'user'";
+docker exec -it mymysql mysql -uroot -ppassword <<< "mysqladmin GRANT ALL ON streamdb.* TO 'user'";
 
 docker exec -it mymysql mysql --user=user -ppassword -e "CREATE TABLE IF NOT EXISTS taxi_events_sink
                                     (
