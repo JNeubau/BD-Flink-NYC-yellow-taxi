@@ -1,7 +1,8 @@
 source ./environ.sh
 
 echo "Deleting Kafka topics..."
-kafka-topics.sh --bootstrap-server ${CLUSTER_NAME}-w-1:9092 --delete --topic ${KAFKA_TOPIC_POWER}
+kafka-topics.sh --bootstrap-server ${CLUSTER_NAME}-w-1:9092 --delete --topic ${KAFKA_TOPIC_TAXI}
+
 echo 
 
 echo "Delete repository..."

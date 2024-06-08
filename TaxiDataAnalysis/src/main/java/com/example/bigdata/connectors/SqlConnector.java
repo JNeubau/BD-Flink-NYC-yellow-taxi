@@ -30,7 +30,7 @@ public class SqlConnector {
         JdbcConnectionOptions connectionOptions = new
                 JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
                 .withUrl(properties.getRequired("mysql.url"))
-                .withDriverName("com.mysql.jdbc.Driver")
+                .withDriverName(properties.getRequired("mysql.driver"))
                 .withUsername(properties.getRequired("mysql.username"))
                 .withPassword(properties.getRequired("mysql.password"))
                 .build();
