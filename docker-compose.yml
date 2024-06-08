@@ -1,20 +1,35 @@
 services:
   cassandra:
-    image: mysql:latest
-    container_name: mymysql
+    image: cassandra:latest
+    container_name: cassandra
     ports:
-      - "3306:3306"
-    expose:
-      - "3306"
+      - "9042:9042"
     environment:
-      - MYSQL_ROOT_PASSWORD: "password"
-      - MYSQL_USER: "user"
-      - MYSQL_PASSWORD: "password"
-      - MYSQL_DATABASE: "streamdb"
-    volumes:
-      - /tmp/datadir:/var/lib/mysql
+      - CASSANDRA_USER=admin
+      - CASSANDRA_PASSWORD=admin
     healthcheck:
-      test: [ "CMD", "echo 'SELECT version();'| mysql" ]
+      test: [ "CMD", "cqlsh", "-u cassandra", "-p cassandra" ,"-e describe keyspaces" ]
       interval: 15s
       timeout: 10s
       retries: 10
+
+# services:
+#   cassandra:
+#     image: mysql:latest
+#     container_name: mymysql
+#     ports:
+#       - "3306:3306"
+#     expose:
+#       - "3306"
+#     environment:
+#       - MYSQL_ROOT_PASSWORD: "password"
+#       - MYSQL_USER: "user"
+#       - MYSQL_PASSWORD: "password"
+#       - MYSQL_DATABASE: "streamdb"
+#     volumes:
+#       - /tmp/datadir:/var/lib/mysql
+#     healthcheck:
+#       test: [ "CMD", "echo 'SELECT version();'| mysql" ]
+#       interval: 15s
+#       timeout: 10s
+#       retries: 10

@@ -14,7 +14,9 @@ import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
+import org.apache.flink.streaming.connectors.cassandra.CassandraSink;
 import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 
 import java.sql.PreparedStatement;
@@ -41,11 +43,11 @@ public class Connectors {
                 .build();
     }
 
-//    public static CassandraSink<CrimeAggregate> getCassandraAggSink(DataStream<CrimeAggregate> input, ParameterTool properties) throws Exception {
-//        return CassandraSink.addSink(input)
-//                .setHost(properties.get(Parameters.CASSANDRA_HOST), properties.getInt(Parameters.CASSANDRA_PORT, 9042))
-//                .build();
-//    }
+    public static CassandraSink<ResultData> getCassandraAggSink(DataStream<ResultData> input, ParameterTool properties) throws Exception {
+        return CassandraSink.addSink(input)
+                .setHost(properties.get("CASSANDRA_HOST"), properties.getInt("CASSANDRA_PORT", 9042))
+                .build();
+    }
 
     public static SinkFunction<ResultData> getMySQLSink(ParameterTool properties) {
 

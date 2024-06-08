@@ -50,6 +50,8 @@ echo "Downloading dependencies"
 # sudo cp ~/*-*.jar /usr/lib/flink/lib/
 wget https://repo1.maven.org/maven2/org/apache/flink/flink-connector-kafka/1.16.1/flink-connector-kafka-1.16.1.jar
 wget https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar
+
+wget https://repo1.maven.org/maven2/org/apache/flink/flink-connector-cassandra_2.12/1.15.4/flink-connector-cassandra_2.12-1.15.4.jar
 sudo cp ~/*-*.jar /usr/lib/flink/lib/
 echo ""
 
@@ -63,20 +65,38 @@ sudo apt-get install docker-compose-plugin
 docker compose down
 docker compose up -d --wait
 
-echo "Preparing mysql schema"
-docker exec -it mymysql mysql -uroot -ppassword <<< "mysqladmin GRANT ALL ON streamdb TO 'user' IDENTIFIED BY 'password' WITH GRANT OPTION";
-
-docker exec -it mymysql mysql --user=user -ppassword << "CREATE TABLE IF NOT EXISTS taxi_events_sink
+echo "Preparing cassandra schema"
+docker exec -it cassandra cqlsh -e "CREATE KEYSPACE IF NOT EXISTS crime_data WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
+                                    USE crime_data;
+                                    CREATE TABLE IF NOT EXISTS crime_aggregate
                                     (
-                                        borough varchar(255),
-                                        from_val varchar(50),
-                                        to_val varchar(50),
-                                        departures integer, 
-                                        arrivals integer, 
-                                        totalPassengers integer, 
-                                        totalAmount integer)
-                                        PRIMARY KEY ((borough), from_val, to_val)
-                                    );"
-                                    # TRUNCATE crime_data.crime_aggregate;"
+                                        district               INT,
+                                        month                  INT,
+                                        primary_description    TEXT,
+                                        count                  BIGINT,
+                                        count_arrest           BIGINT,
+                                        count_domestic         BIGINT,
+                                        count_monitored_by_fbi BIGINT,
+                                        PRIMARY KEY ((district), month, primary_description)
+                                    );
+                                    TRUNCATE crime_data.crime_aggregate;"
 
 echo "Reset complete"
+
+# echo "Preparing mysql schema"
+# docker exec -it mymysql mysql -uroot -ppassword <<< "mysqladmin GRANT ALL ON streamdb TO 'user' IDENTIFIED BY 'password' WITH GRANT OPTION";
+
+# docker exec -it mymysql mysql --user=user -ppassword <<< "CREATE TABLE IF NOT EXISTS taxi_events_sink
+#                                     (
+#                                         borough varchar(255),
+#                                         from_val varchar(50),
+#                                         to_val varchar(50),
+#                                         departures integer, 
+#                                         arrivals integer, 
+#                                         totalPassengers integer, 
+#                                         totalAmount integer)
+#                                         PRIMARY KEY ((borough), from_val, to_val)
+#                                     );"
+#                                     # TRUNCATE crime_data.crime_aggregate;"
+
+# echo "Reset complete"
