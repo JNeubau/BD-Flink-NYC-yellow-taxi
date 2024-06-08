@@ -18,7 +18,6 @@ public class GetFinalResultWindowFunction extends ProcessWindowFunction<TaxiLocS
         int arrivals = 0;
         int totalPassengersArr = 0;
         int totalPassengersDep = 0;
-//        double totalAmount = 0.0;
 
         for (TaxiLocStats stats : input) {
             departures += stats.getDepartures();

@@ -5,7 +5,6 @@ public class TaxiLocAccumulator {
     private int arrivals;
     private int totalPassengersArr;
     private int totalPassengersDep;
-//    private double totalAmount;
 
     public void addDeparture(int passengers) {
         departures++;

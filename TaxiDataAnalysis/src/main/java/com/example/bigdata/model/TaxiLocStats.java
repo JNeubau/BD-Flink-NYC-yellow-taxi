@@ -5,7 +5,6 @@ public class TaxiLocStats {
     private int arrivals;
     private int totalPassengersArr;
     private int totalPassengersDep;
-//    private double totalAmount;
 
     public TaxiLocStats(int departures, int arrivals, int totalPassengersArr, int totalPassengersDep) {
         this.departures = departures;

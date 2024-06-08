@@ -46,19 +46,7 @@ public class TaxiEventsAnalysis {
 
 //    DataStream<String> stringDataStream = env.fromSource(source, WatermarkStrategy.noWatermarks() , "Kafka Source");
 
-// stream
-// .keyBy(...) //<- utworzenie odpowiedniego typu strumienia
-// .window(...) //<- wymagany: "window assigner"
-// [.trigger(...)] //<- opcjonalny: "trigger" (lub domyślny trigger)
-// [.evictor(...)] //<- opcjonalny: "evictor" (lub brak evictora)
-// [.allowedLateness(...)] //<- opcjonalny: "obsługa danych zbyt późnych
-// // o zadany dodatkowy czas" (lub zero)
-// [.sideOutputLateData(...)] //<- opcjonalny: "znacznik dodatkowego wyjścia"
-// // dla danych spóźnionych" (lub brak takiego dodatkowego wyjścia)
-// .reduce/aggregate/apply() // <- wymagana: "funkcja okna"
-// [.getSideOutput(...)] //<- opcjonalny: "znacznik bocznego strumienia" – odbiór
-// // spóźnionych danych
-
+        /* read data from file */
         DataStream<TaxiEvent> taxiEventsDS = env.addSource(new TaxiEventSource(properties)).name( "taxi" );
 
         /* Join two types of data */
@@ -71,16 +59,14 @@ public class TaxiEventsAnalysis {
                 );
 
 
-        /* TODO: Mamy już komplet potrzebnych informacji do wykonania naszych obliczeń.
-                 Twoim celem jest dokonywanie obliczeń dla
+        /* Dokonywanie obliczeń dla
                  - każdej dzielnicy i
                  - każdego kolejnego dnia.
-                 Chcemy dowiedzieć się:
+             Dla zmiennych:
                  - ile było wyjazdów (startStop = 0),
                  - ile było przyjazdów (startStop = 1)
-                 - jaka liczba pasażerów została obsłużona (dla przyjazdów)
-                 - jaka sumeryczna kwota została ujszczona za przejazdy (tylko dla przyjazdów) ==>
-                    jaka liczba pasażerów została obsłużona (dla wyjazdów)
+                 - liczba pasażerów obsłużona dla przyjazdów
+                 - liczba pasażerów obsłużona dla wyjazdów
 */
         String delay = "A";
 

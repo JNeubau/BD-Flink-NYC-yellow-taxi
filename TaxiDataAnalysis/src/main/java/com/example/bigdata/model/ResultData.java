@@ -10,7 +10,6 @@ public class ResultData {
     private int arrivals;
     private int totalPassengersArr;
     private int totalPassengersDep;
-//    private double totalAmount;
 
     public ResultData(String borough, Date from, Date to, int departures, int arrivals, int totalPassengersArr, int totalPassengersDep) {
         this.borough = borough;
