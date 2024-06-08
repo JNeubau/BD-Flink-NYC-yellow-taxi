@@ -67,20 +67,20 @@ docker compose down
 docker compose up -d --wait
 
 echo "Preparing cassandra schema"
-docker exec -it cassandra cqlsh -e "CREATE KEYSPACE IF NOT EXISTS crime_data WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
-                                    USE crime_data;
-                                    CREATE TABLE IF NOT EXISTS crime_aggregate
+docker exec -it cassandra cqlsh -e "CREATE KEYSPACE IF NOT EXISTS taxi_data WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
+                                    USE taxi_data;
+                                    CREATE TABLE IF NOT EXISTS taxi_events_sink
                                     (
-                                        district               INT,
-                                        month                  INT,
-                                        primary_description    TEXT,
-                                        count                  BIGINT,
-                                        count_arrest           BIGINT,
-                                        count_domestic         BIGINT,
-                                        count_monitored_by_fbi BIGINT,
-                                        PRIMARY KEY ((district), month, primary_description)
+                                        borough                TEXT,
+                                        from_val               TEXT,
+                                        to_val                 TEXT,
+                                        departures             BIGINT,
+                                        arrivals               BIGINT,
+                                        totalPassengersArr     BIGINT,
+                                        totalPassengersDep     BIGINT,
+                                        PRIMARY KEY ((borough), from_val, totalPassengers)
                                     );
-                                    TRUNCATE crime_data.crime_aggregate;"
+                                    TRUNCATE taxi_data.taxi_events_sink;"
 
 echo "Reset complete"
 

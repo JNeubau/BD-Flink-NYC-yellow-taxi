@@ -81,7 +81,7 @@ public class Connectors {
         SinkFunction<ResultData> jdbcSink =
                 JdbcSink.sink("insert into taxi_events_sink" +
                                 "(borough, from_val, to_val, " +
-                                "departures, arrivals, totalPassengers, totalAmount) \n" +
+                                "departures, arrivals, totalPassengersArr, totalPassengersDep) \n" +
                                 "values (?, ?, ?, ?, ?, ?, ?)",
                         statementBuilder,
                         executionOptions,
