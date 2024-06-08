@@ -1,4 +1,4 @@
-package com.example.bigdata.windows;
+package com.example.bigdata.tools;
 
 import org.apache.flink.streaming.api.windowing.triggers.Trigger;
 import org.apache.flink.streaming.api.windowing.triggers.TriggerResult;

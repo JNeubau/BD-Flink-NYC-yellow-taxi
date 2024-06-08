@@ -1,5 +1,4 @@
 # Sprawozdanie - Apache Kafka - NYC Yellow Taxi 
-Joanna Neubauer 148111
 
 # KafkaProducer
 

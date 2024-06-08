@@ -3,9 +3,10 @@ package com.example.bigdata;
 import com.example.bigdata.connectors.TaxiEventSource;
 import com.example.bigdata.model.*;
 import com.example.bigdata.tools.EnrichWithLocData;
+import com.example.bigdata.tools.GetAnomalyWindowFunction;
 import com.example.bigdata.tools.GetFinalResultWindowFunction;
 import com.example.bigdata.tools.TaxiLocAggregator;
-import com.example.bigdata.windows.EveryEventTimeTrigger;
+import com.example.bigdata.tools.EveryEventTimeTrigger;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -13,6 +14,8 @@ import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.assigners.SlidingProcessingTimeWindows;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
@@ -68,7 +71,7 @@ public class TaxiEventsAnalysis {
                  - liczba pasażerów obsłużona dla przyjazdów
                  - liczba pasażerów obsłużona dla wyjazdów
 */
-        String delay = "A";
+        String delay = "C";
 
         DataStream<ResultData> taxiLocStatsDS = taxiLocEventsDS
                 .keyBy(TaxiLocEvent::getBorough)
@@ -76,7 +79,25 @@ public class TaxiEventsAnalysis {
                 .trigger(delay.equals("A") ? EveryEventTimeTrigger.create() : EventTimeTrigger.create())
                 .aggregate(new TaxiLocAggregator(), new GetFinalResultWindowFunction());
 
-        taxiLocStatsDS.print();
+
+        int anomalyTime = properties.getInt("FLINK_ANOMALY_TIME", 4);
+//        int anomalyTime = 4;
+        int anomalyPeople = properties.getInt("FLINK_ANOMALY_PEOPLE", 10000);
+
+        DataStream<DeparturesAnomaly> anomalyOutput = taxiLocEventsDS
+                .keyBy(TaxiLocEvent::getBorough)
+                .window(SlidingEventTimeWindows.of(
+                        Time.hours(anomalyTime),
+                        Time.hours(1)))
+                .aggregate(new TaxiLocAggregator(), new GetAnomalyWindowFunction())
+                .filter(departuresAnomaly -> departuresAnomaly.getDifference() > anomalyPeople);
+//                .map(DeparturesAnomaly::toString);
+
+        // print to console
+//        taxiLocStatsDS.print();
+        anomalyOutput.print();
+
+        // save to database
 //        taxiLocStatsDS.addSink(SqlConnector.getMySQLSink(properties));
 
         env.execute("Taxi Events Analysis");
