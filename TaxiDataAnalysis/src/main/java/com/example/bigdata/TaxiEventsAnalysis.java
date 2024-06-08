@@ -78,8 +78,9 @@ public class TaxiEventsAnalysis {
                  Chcemy dowiedzieć się:
                  - ile było wyjazdów (startStop = 0),
                  - ile było przyjazdów (startStop = 1)
-                 - jaka liczba pasażerów została obsłużona (tylko dla przyjazdów)
-                 - jaka sumeryczna kwota została ujszczona za przejazdy (tylko dla przyjazdów)
+                 - jaka liczba pasażerów została obsłużona (dla przyjazdów)
+                 - jaka sumeryczna kwota została ujszczona za przejazdy (tylko dla przyjazdów) ==>
+                    jaka liczba pasażerów została obsłużona (dla wyjazdów)
 */
         String delay = "A";
 

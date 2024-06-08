@@ -3,14 +3,15 @@ package com.example.bigdata.model;
 public class TaxiLocStats {
     private int departures;
     private int arrivals;
-    private int totalPassengers;
-    private double totalAmount;
+    private int totalPassengersArr;
+    private int totalPassengersDep;
+//    private double totalAmount;
 
-    public TaxiLocStats(int departures, int arrivals, int totalPassengers, double totalAmount) {
+    public TaxiLocStats(int departures, int arrivals, int totalPassengersArr, int totalPassengersDep) {
         this.departures = departures;
         this.arrivals = arrivals;
-        this.totalPassengers = totalPassengers;
-        this.totalAmount = totalAmount;
+        this.totalPassengersArr = totalPassengersArr;
+        this.totalPassengersDep = totalPassengersDep;
     }
 
     // Getters and setters
@@ -30,20 +31,20 @@ public class TaxiLocStats {
         this.arrivals = arrivals;
     }
 
-    public int getTotalPassengers() {
-        return totalPassengers;
+    public int getTotalPassengersArr() {
+        return totalPassengersArr;
     }
 
-    public void setTotalPassengers(int totalPassengers) {
-        this.totalPassengers = totalPassengers;
+    public void setTotalPassengersArr(int totalPassengers) {
+        this.totalPassengersArr = totalPassengers;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
+    public int getTotalPassengersDep() {
+        return totalPassengersDep;
     }
 
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setTotalPassengersDep(int totalPassengersDep) {
+        this.totalPassengersDep = totalPassengersDep;
     }
 
     @Override
@@ -51,8 +52,8 @@ public class TaxiLocStats {
         return "TaxiLocStats{" +
                 "departures=" + departures +
                 ", arrivals=" + arrivals +
-                ", totalPassengers=" + totalPassengers +
-                ", totalAmount=" + totalAmount +
+                ", totalPassengersArr=" + totalPassengersArr +
+                ", totalPassengersDep=" + totalPassengersDep +
                 '}';
     }
 }

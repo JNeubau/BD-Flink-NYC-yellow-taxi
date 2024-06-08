@@ -3,28 +3,29 @@ package com.example.bigdata.model;
 public class TaxiLocAccumulator {
     private int departures;
     private int arrivals;
-    private int totalPassengers;
-    private double totalAmount;
+    private int totalPassengersArr;
+    private int totalPassengersDep;
+//    private double totalAmount;
 
-    public void addDeparture() {
+    public void addDeparture(int passengers) {
         departures++;
+        totalPassengersDep += passengers;
     }
 
-    public void addArrival(int passengers, double amount) {
+    public void addArrival(int passengers) {
         arrivals++;
-        totalPassengers += passengers;
-        totalAmount += amount;
+        totalPassengersArr += passengers;
     }
 
     public TaxiLocStats toStats() {
-        return new TaxiLocStats(departures, arrivals, totalPassengers, totalAmount);
+        return new TaxiLocStats(departures, arrivals, totalPassengersArr, totalPassengersDep);
     }
 
     public TaxiLocAccumulator merge(TaxiLocAccumulator other) {
         departures += other.departures;
         arrivals += other.arrivals;
-        totalPassengers += other.totalPassengers;
-        totalAmount += other.totalAmount;
+        totalPassengersArr += other.totalPassengersArr;
+        totalPassengersDep += other.totalPassengersDep;
         return this;
     }
 }

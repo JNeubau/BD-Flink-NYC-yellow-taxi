@@ -23,8 +23,8 @@ public class SqlConnector {
                         ps.setString(3, data.getTo().toString());
                         ps.setInt(4, data.getDepartures());
                         ps.setInt(5, data.getArrivals());
-                        ps.setInt(6, data.getTotalPassengers());
-                        ps.setDouble(7, data.getTotalAmount());
+                        ps.setInt(6, data.getTotalPassengersArr());
+                        ps.setInt(7, data.getTotalPassengersDep());
                     }
                 };
         JdbcConnectionOptions connectionOptions = new

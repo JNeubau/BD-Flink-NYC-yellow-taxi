@@ -8,17 +8,18 @@ public class ResultData {
     private Date to;
     private int departures;
     private int arrivals;
-    private int totalPassengers;
-    private double totalAmount;
+    private int totalPassengersArr;
+    private int totalPassengersDep;
+//    private double totalAmount;
 
-    public ResultData(String borough, Date from, Date to, int departures, int arrivals, int totalPassengers, double totalAmount) {
+    public ResultData(String borough, Date from, Date to, int departures, int arrivals, int totalPassengersArr, int totalPassengersDep) {
         this.borough = borough;
         this.from = from;
         this.to = to;
         this.departures = departures;
         this.arrivals = arrivals;
-        this.totalPassengers = totalPassengers;
-        this.totalAmount = totalAmount;
+        this.totalPassengersArr = totalPassengersArr;
+        this.totalPassengersDep = totalPassengersDep;
     }
 
     // Getters and setters
@@ -61,20 +62,20 @@ public class ResultData {
         this.arrivals = arrivals;
     }
 
-    public int getTotalPassengers() {
-        return totalPassengers;
+    public int getTotalPassengersArr() {
+        return totalPassengersArr;
     }
 
-    public void setTotalPassengers(int totalPassengers) {
-        this.totalPassengers = totalPassengers;
+    public void setTotalPassengersArr(int totalPassengersArr) {
+        this.totalPassengersArr = totalPassengersArr;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
+    public int getTotalPassengersDep() {
+        return totalPassengersDep;
     }
 
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setTotalPassengersDep(int totalPassengersDep) {
+        this.totalPassengersDep = totalPassengersDep;
     }
 
     @Override
@@ -85,8 +86,8 @@ public class ResultData {
                 ", to=" + to +
                 ", departures=" + departures +
                 ", arrivals=" + arrivals +
-                ", totalPassengers=" + totalPassengers +
-                ", totalAmount=" + totalAmount +
+                ", totalPassengersArr=" + totalPassengersArr +
+                ", totalPassengersDep=" + totalPassengersDep +
                 '}';
     }
 }

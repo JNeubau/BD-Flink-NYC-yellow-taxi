@@ -16,14 +16,15 @@ public class GetFinalResultWindowFunction extends ProcessWindowFunction<TaxiLocS
     public void process(String key, Context context, Iterable<TaxiLocStats> input, Collector<ResultData> out) {
         int departures = 0;
         int arrivals = 0;
-        int totalPassengers = 0;
-        double totalAmount = 0.0;
+        int totalPassengersArr = 0;
+        int totalPassengersDep = 0;
+//        double totalAmount = 0.0;
 
         for (TaxiLocStats stats : input) {
             departures += stats.getDepartures();
             arrivals += stats.getArrivals();
-            totalPassengers += stats.getTotalPassengers();
-            totalAmount += stats.getTotalAmount();
+            totalPassengersArr += stats.getTotalPassengersArr();
+            totalPassengersDep += stats.getTotalPassengersDep();
         }
 
         Instant windowStart = Instant.ofEpochMilli(context.window().getStart());
@@ -35,8 +36,8 @@ public class GetFinalResultWindowFunction extends ProcessWindowFunction<TaxiLocS
                 Date.from(windowEnd),
                 departures,
                 arrivals,
-                totalPassengers,
-                totalAmount);
+                totalPassengersArr,
+                totalPassengersDep);
 
         out.collect(resultData);
     }

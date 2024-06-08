@@ -14,9 +14,9 @@ public class TaxiLocAggregator implements AggregateFunction<TaxiLocEvent, TaxiLo
     @Override
     public TaxiLocAccumulator add(TaxiLocEvent value, TaxiLocAccumulator accumulator) {
         if (value.getStartStop() == 0) {
-            accumulator.addDeparture();
+            accumulator.addDeparture(value.getPassengerCount());
         } else if (value.getStartStop() == 1) {
-            accumulator.addArrival(value.getPassengerCount(), value.getAmount());
+            accumulator.addArrival(value.getPassengerCount());
         }
         return accumulator;
     }
