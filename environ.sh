@@ -6,7 +6,8 @@ export CLUSTER_NAME=$(/usr/share/google/get_metadata_value attributes/dataproc-c
 
 export KAFKA_TOPIC_TAXI="taxi-input-topic"
 export KAFKA_TOPIC_LOC="loc-input-topic"
-export ANOMALY_OUTPUT_TOPIC = "anomaly-topic"
+export KAFKA_TOPIC_ANOMALY = "anomaly-topic"
+
 export INPUT_DATA_DIR="test"
 export INPUT_DATA_DIR_PROD="yellow-tripdata-result"
 export SLEEP_TIME=50

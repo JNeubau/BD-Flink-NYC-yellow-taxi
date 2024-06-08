@@ -1,6 +1,6 @@
 source ./environ.sh
 
-echo "Ceate datadir"
+echo "Create datadir"
 mkdir /tmp/datadir
 
 echo "Run docker container"
