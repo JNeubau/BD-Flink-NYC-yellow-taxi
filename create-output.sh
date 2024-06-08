@@ -11,3 +11,19 @@ sleep 10
 echo "Connect to container:"
 docker exec -it mymysql bash
 mysql -uroot -pmy-secret-pw
+
+CREATE USER 'streamuser'@'%' IDENTIFIED BY 'stream';
+CREATE DATABASE IF NOT EXISTS streamdb CHARACTER SET utf8;
+GRANT ALL ON streamdb.* TO 'streamuser'@'%';
+
+mysql -u streamuser -p streamdb
+# stream 
+
+create table taxi_events_sink (
+    borough varchar(255),
+    from_val varchar(50),
+    to_val varchar(50),
+    departures integer, 
+    arrivals integer, 
+    totalPassengers integer, 
+    totalAmount integer);
