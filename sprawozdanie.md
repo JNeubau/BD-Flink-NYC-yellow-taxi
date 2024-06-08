@@ -1,6 +1,6 @@
 # Sprawozdanie - Apache Flink - NYC Yellow Taxi 
 
-## Cluster
+## Prepare the environment (Producent; skrypty inicjujące i zasilający)
 ```
 gcloud dataproc clusters create ${CLUSTER_NAME} \
 --enable-component-gateway --region ${REGION} --subnet default \
@@ -12,7 +12,6 @@ gcloud dataproc clusters create ${CLUSTER_NAME} \
 --initialization-actions gs://goog-dataproc-initialization-actions-${REGION}/kafka/kafka.sh
 ```
 
-## Prepare the environment
 1. Download package from [https://github.com/JNeubau/BD-Flink-NYC-yellow-taxi.git]().
 Unpack the files.
 2. Make sure that source data is in your bucket in with the original name.
@@ -34,3 +33,21 @@ chmod +x *.sh
 ./setup.sh
 ./sender-kafka_taxi.sh
 ```
+
+![setup script](image.png)
+
+## Transformations (Utrzymanie obrazu czasu rzeczywistego – transformacje)
+
+## A delay (Utrzymanie obrazu czasu rzeczywistego – obsługa trybu A)
+
+## C delay (Utrzymanie obrazu czasu rzeczywistego – obsługa trybu C)
+
+## Anomalies (Wykrywanie anomalii)
+
+## Run the script (Program przetwarzający strumienie danych; skrypt uruchamiający)
+
+## Output-create (Miejsce utrzymywania obrazów czasu rzeczywistego – skrypt tworzący)
+
+### Characteristics (Miejsce utrzymywania obrazów czasu rzeczywistego – cechy)
+
+## Output-read (Konsument: skrypt odczytujący wyniki przetwarzania)

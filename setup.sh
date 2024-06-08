@@ -50,8 +50,7 @@ echo "Downloading dependencies"
 # wget https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar
 # sudo cp ~/*-*.jar /usr/lib/flink/lib/
 wget https://repo1.maven.org/maven2/org/apache/flink/flink-connector-kafka/1.16.1/flink-connector-kafka-1.16.1.jar
-wget https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar
-
+# wget https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.33/mysql-connector-j-8.0.33.jar
 wget https://repo1.maven.org/maven2/org/apache/flink/flink-connector-cassandra_2.12/1.16.1/flink-connector-cassandra_2.12-1.16.1.jar
 sudo cp ~/*-*.jar /usr/lib/flink/lib/
 echo ""
@@ -78,7 +77,7 @@ docker exec -it cassandra cqlsh -e "CREATE KEYSPACE IF NOT EXISTS taxi_data WITH
                                         arrivals               BIGINT,
                                         totalPassengersArr     BIGINT,
                                         totalPassengersDep     BIGINT,
-                                        PRIMARY KEY ((borough), from_val, totalPassengers)
+                                        PRIMARY KEY ((borough), from_val, totalPassengersArr, totalPassengersDep)
                                     );
                                     TRUNCATE taxi_data.taxi_events_sink;"
 
