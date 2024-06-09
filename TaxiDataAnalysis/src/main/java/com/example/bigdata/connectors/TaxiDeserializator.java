@@ -18,14 +18,8 @@ public class TaxiDeserializator implements KafkaRecordDeserializationSchema<Taxi
 
     @Override
     public void deserialize(ConsumerRecord<byte[], byte[]> consumerRecord, Collector<TaxiEvent> collector) throws IOException {
-//        String[] values = new String(consumerRecord.value()).split(",");
-//        if ("\"\"".equals(values[5])) {
-//            return;
-//        }
-//        TaxiEvent taxiEvent = new TaxiEvent();
         try {
             TaxiEvent taxiEvent = TaxiEvent.fromString( new String(consumerRecord.value()));
-//            sourceContext.collectWithTimestamp(taxiEvent,taxiEvent.getTimestamp().getTime());
             collector.collect(taxiEvent);
         } catch (ParseException e) {
             // Print malformed line to stderr

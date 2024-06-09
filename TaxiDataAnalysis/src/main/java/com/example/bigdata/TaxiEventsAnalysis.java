@@ -20,8 +20,11 @@ import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindow
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.triggers.EventTimeTrigger;
+import org.apache.flink.streaming.api.windowing.triggers.Trigger;
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 
 import java.time.Duration;
+import java.util.Objects;
 
 public class TaxiEventsAnalysis {
     public static void main(String[] args) throws Exception {
@@ -37,8 +40,8 @@ public class TaxiEventsAnalysis {
         env.getCheckpointConfig().setCheckpointTimeout(60000);
 //        env.getCheckpointConfig().setCheckpointStorage(properties.getRequired("FLINK_CHECKPOINT_DIR"));
 
-//        DataStream<TaxiEvent> crimesSource = env.fromSource(Connectors.getCrimesSource(properties), WatermarkStrategy.noWatermarks(), "Taxi Source");
-//        DataStream<LocData> iucrSource = env.fromSource(Connectors.getIucrSource(properties), WatermarkStrategy.noWatermarks(), "Loc Source");
+        DataStream<TaxiEvent> taxiEventsDS = env.fromSource(Connectors.getTaxiSource(properties), WatermarkStrategy.noWatermarks(), "Taxi Source");
+//        DataStream<LocData> locEventsDS = env.fromSource(Connectors.getLocSource(properties), WatermarkStrategy.noWatermarks(), "Loc Source");
 //
 //    KafkaSource<String> source = KafkaSource.<String>builder()
 //            .setBootstrapServers("localhost:29092")
@@ -50,7 +53,7 @@ public class TaxiEventsAnalysis {
 //    DataStream<String> stringDataStream = env.fromSource(source, WatermarkStrategy.noWatermarks() , "Kafka Source");
 
         /* read data from file */
-        DataStream<TaxiEvent> taxiEventsDS = env.addSource(new TaxiEventSource(properties)).name( "taxi" );
+//        DataStream<TaxiEvent> taxiEventsDS = env.addSource(new TaxiEventSource(properties)).name( "taxi" );
 
         /* Join two types of data */
         DataStream<TaxiLocEvent> taxiLocEventsDS = taxiEventsDS
@@ -76,12 +79,11 @@ public class TaxiEventsAnalysis {
         DataStream<ResultData> taxiLocStatsDS = taxiLocEventsDS
                 .keyBy(TaxiLocEvent::getBorough)
                 .window(TumblingEventTimeWindows.of(Time.days(1)))
-                .trigger(delay.equals("A") ? EveryEventTimeTrigger.create() : EventTimeTrigger.create())
+                .trigger((Objects.equals(delay, "A")) ? EveryEventTimeTrigger.create() : EventTimeTrigger.create())
                 .aggregate(new TaxiLocAggregator(), new GetFinalResultWindowFunction());
 
 
         int anomalyTime = properties.getInt("FLINK_ANOMALY_TIME", 4);
-//        int anomalyTime = 4;
         int anomalyPeople = properties.getInt("FLINK_ANOMALY_PEOPLE", 10000);
 
         DataStream<DeparturesAnomaly> anomalyOutput = taxiLocEventsDS
@@ -90,16 +92,16 @@ public class TaxiEventsAnalysis {
                         Time.hours(anomalyTime),
                         Time.hours(1)))
                 .aggregate(new TaxiLocAggregator(), new GetAnomalyWindowFunction())
-                .filter(departuresAnomaly -> departuresAnomaly.getDifference() > anomalyPeople);
+                .filter(departuresAnomaly -> departuresAnomaly.getDifference() >= anomalyPeople);
 //                .map(DeparturesAnomaly::toString);
 
         // print to console
-//        taxiLocStatsDS.print();
-//        anomalyOutput.print();
+        taxiLocStatsDS.print();
+        anomalyOutput.print();
 
         // save to database
 //        taxiLocStatsDS.addSink(Connectors.getMySQLSink(properties));
-        Connectors.getCassandraAggSink(taxiLocStatsDS, properties);
+//        Connectors.getCassandraAggSink(taxiLocStatsDS, properties);
         anomalyOutput.map(DeparturesAnomaly::toString).sinkTo(Connectors.getAnomalySink(properties));
 
         env.execute("Taxi Events Analysis");

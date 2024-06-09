@@ -23,7 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Connectors {
-    public static KafkaSource<TaxiEvent> getCrimesSource(ParameterTool properties) {
+    public static KafkaSource<TaxiEvent> getTaxiSource(ParameterTool properties) {
         return KafkaSource.<TaxiEvent>builder()
                 .setBootstrapServers(properties.getRequired("BOOTSTRAP_SERVERS"))
                 .setTopics(properties.getRequired("TAXI_INPUT_TOPIC"))
@@ -33,7 +33,7 @@ public class Connectors {
                 .build();
     }
 
-    public static KafkaSource<LocData> getIucrSource(ParameterTool properties) {
+    public static KafkaSource<LocData> getLocSource(ParameterTool properties) {
         return KafkaSource.<LocData>builder()
                 .setBootstrapServers(properties.getRequired("BOOTSTRAP_SERVERS"))
                 .setTopics(properties.getRequired("LOC_INPUT_TOPIC"))
@@ -43,51 +43,51 @@ public class Connectors {
                 .build();
     }
 
-    public static CassandraSink<ResultData> getCassandraAggSink(DataStream<ResultData> input, ParameterTool properties) throws Exception {
-        return CassandraSink.addSink(input)
-                .setHost(properties.get("CASSANDRA_HOST"), properties.getInt("CASSANDRA_PORT", 9042))
-                .build();
-    }
-
-    public static SinkFunction<ResultData> getMySQLSink(ParameterTool properties) {
-
-        JdbcStatementBuilder<ResultData> statementBuilder =
-                new JdbcStatementBuilder<ResultData>() {
-                    @Override
-                    public void accept(PreparedStatement ps, ResultData data) throws SQLException {
-                        ps.setString(1, data.getBorough());
-                        ps.setString(2, data.getFrom().toString());
-                        ps.setString(3, data.getTo().toString());
-                        ps.setInt(4, data.getDepartures());
-                        ps.setInt(5, data.getArrivals());
-                        ps.setInt(6, data.getTotalPassengersArr());
-                        ps.setInt(7, data.getTotalPassengersDep());
-                    }
-                };
-        JdbcConnectionOptions connectionOptions = new
-                JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
-                .withUrl(properties.getRequired("mysql.url"))
-                .withDriverName(properties.getRequired("mysql.driver"))
-                .withUsername(properties.getRequired("mysql.username"))
-                .withPassword(properties.getRequired("mysql.password"))
-                .build();
-
-        JdbcExecutionOptions executionOptions = JdbcExecutionOptions.builder()
-                .withBatchSize(100)
-                .withBatchIntervalMs(200)
-                .withMaxRetries(5)
-                .build();
-
-        SinkFunction<ResultData> jdbcSink =
-                JdbcSink.sink("insert into taxi_events_sink" +
-                                "(borough, from_val, to_val, " +
-                                "departures, arrivals, totalPassengersArr, totalPassengersDep) \n" +
-                                "values (?, ?, ?, ?, ?, ?, ?)",
-                        statementBuilder,
-                        executionOptions,
-                        connectionOptions);
-        return jdbcSink;
-    }
+//    public static CassandraSink<ResultData> getCassandraAggSink(DataStream<ResultData> input, ParameterTool properties) throws Exception {
+//        return CassandraSink.addSink(input)
+//                .setHost(properties.get("CASSANDRA_HOST"), properties.getInt("CASSANDRA_PORT", 9042))
+//                .build();
+//    }
+//
+//    public static SinkFunction<ResultData> getMySQLSink(ParameterTool properties) {
+//
+//        JdbcStatementBuilder<ResultData> statementBuilder =
+//                new JdbcStatementBuilder<ResultData>() {
+//                    @Override
+//                    public void accept(PreparedStatement ps, ResultData data) throws SQLException {
+//                        ps.setString(1, data.getBorough());
+//                        ps.setString(2, data.getFrom().toString());
+//                        ps.setString(3, data.getTo().toString());
+//                        ps.setInt(4, data.getDepartures());
+//                        ps.setInt(5, data.getArrivals());
+//                        ps.setInt(6, data.getTotalPassengersArr());
+//                        ps.setInt(7, data.getTotalPassengersDep());
+//                    }
+//                };
+//        JdbcConnectionOptions connectionOptions = new
+//                JdbcConnectionOptions.JdbcConnectionOptionsBuilder()
+//                .withUrl(properties.getRequired("mysql.url"))
+//                .withDriverName(properties.getRequired("mysql.driver"))
+//                .withUsername(properties.getRequired("mysql.username"))
+//                .withPassword(properties.getRequired("mysql.password"))
+//                .build();
+//
+//        JdbcExecutionOptions executionOptions = JdbcExecutionOptions.builder()
+//                .withBatchSize(100)
+//                .withBatchIntervalMs(200)
+//                .withMaxRetries(5)
+//                .build();
+//
+//        SinkFunction<ResultData> jdbcSink =
+//                JdbcSink.sink("insert into taxi_events_sink" +
+//                                "(borough, from_val, to_val, " +
+//                                "departures, arrivals, totalPassengersArr, totalPassengersDep) \n" +
+//                                "values (?, ?, ?, ?, ?, ?, ?)",
+//                        statementBuilder,
+//                        executionOptions,
+//                        connectionOptions);
+//        return jdbcSink;
+//    }
 
     public static KafkaSink<String> getAnomalySink(ParameterTool properties) {
         return KafkaSink.<String>builder()

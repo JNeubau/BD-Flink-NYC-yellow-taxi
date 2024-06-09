@@ -27,3 +27,5 @@ create table taxi_events_sink (
     arrivals integer, 
     totalPassengers integer, 
     totalAmount integer);
+
+docker exec -it cassandra cqlsh -e "SELECT * FROM taxi_data.taxi_events_sink;"
