@@ -33,24 +33,24 @@ public class Connectors {
                 .build();
     }
 
-    public static KafkaSource<LocData> getLocSource(ParameterTool properties) {
-        return KafkaSource.<LocData>builder()
-                .setBootstrapServers(properties.getRequired("BOOTSTRAP_SERVERS"))
-                .setTopics(properties.getRequired("LOC_INPUT_TOPIC"))
-                .setGroupId(properties.getRequired("KAFKA_GROUP_ID"))
-                .setStartingOffsets(OffsetsInitializer.earliest())
-                .setDeserializer(new LocDeserializator())
-                .build();
-    }
-
-//    public static CassandraSink<ResultData> getCassandraAggSink(DataStream<ResultData> input, ParameterTool properties) throws Exception {
-//        return CassandraSink.addSink(input)
-//                .setHost(properties.get("CASSANDRA_HOST"), properties.getInt("CASSANDRA_PORT", 9042))
+//    public static KafkaSource<LocData> getLocSource(ParameterTool properties) {
+//        return KafkaSource.<LocData>builder()
+//                .setBootstrapServers(properties.getRequired("BOOTSTRAP_SERVERS"))
+//                .setTopics(properties.getRequired("LOC_INPUT_TOPIC"))
+//                .setGroupId(properties.getRequired("KAFKA_GROUP_ID"))
+//                .setStartingOffsets(OffsetsInitializer.earliest())
+//                .setDeserializer(new LocDeserializator())
 //                .build();
 //    }
-//
+
+   public static CassandraSink<ResultData> getCassandraAggSink(DataStream<ResultData> input, ParameterTool properties) throws Exception {
+       return CassandraSink.addSink(input)
+               .setHost(properties.get("CASSANDRA_HOST"), properties.getInt("CASSANDRA_PORT", 9042))
+               .build();
+   }
+
 //    public static SinkFunction<ResultData> getMySQLSink(ParameterTool properties) {
-//
+
 //        JdbcStatementBuilder<ResultData> statementBuilder =
 //                new JdbcStatementBuilder<ResultData>() {
 //                    @Override
@@ -71,13 +71,13 @@ public class Connectors {
 //                .withUsername(properties.getRequired("mysql.username"))
 //                .withPassword(properties.getRequired("mysql.password"))
 //                .build();
-//
+
 //        JdbcExecutionOptions executionOptions = JdbcExecutionOptions.builder()
 //                .withBatchSize(100)
 //                .withBatchIntervalMs(200)
 //                .withMaxRetries(5)
 //                .build();
-//
+
 //        SinkFunction<ResultData> jdbcSink =
 //                JdbcSink.sink("insert into taxi_events_sink" +
 //                                "(borough, from_val, to_val, " +

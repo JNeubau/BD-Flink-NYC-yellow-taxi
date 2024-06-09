@@ -38,22 +38,25 @@ public class TaxiEventsAnalysis {
         env.getConfig().setRestartStrategy(RestartStrategies.fixedDelayRestart(3, 10000));
         env.enableCheckpointing(10000, CheckpointingMode.EXACTLY_ONCE);
         env.getCheckpointConfig().setCheckpointTimeout(60000);
-//        env.getCheckpointConfig().setCheckpointStorage(properties.getRequired("FLINK_CHECKPOINT_DIR"));
+
+/*
+        env.getCheckpointConfig().setCheckpointStorage(properties.getRequired("FLINK_CHECKPOINT_DIR"));
 
         DataStream<TaxiEvent> taxiEventsDS = env.fromSource(Connectors.getTaxiSource(properties), WatermarkStrategy.noWatermarks(), "Taxi Source");
-//        DataStream<LocData> locEventsDS = env.fromSource(Connectors.getLocSource(properties), WatermarkStrategy.noWatermarks(), "Loc Source");
-//
-//    KafkaSource<String> source = KafkaSource.<String>builder()
-//            .setBootstrapServers("localhost:29092")
-//            .setTopics("flink-topic").setGroupId("first-group")
-//            .setStartingOffsets(OffsetsInitializer.earliest())
-//            .setValueOnlyDeserializer(new SimpleStringSchema())
-//            .build();
+        DataStream<LocData> locEventsDS = env.fromSource(Connectors.getLocSource(properties), WatermarkStrategy.noWatermarks(), "Loc Source");
 
-//    DataStream<String> stringDataStream = env.fromSource(source, WatermarkStrategy.noWatermarks() , "Kafka Source");
+    KafkaSource<String> source = KafkaSource.<String>builder()
+            .setBootstrapServers("localhost:29092")
+            .setTopics("flink-topic").setGroupId("first-group")
+            .setStartingOffsets(OffsetsInitializer.earliest())
+            .setValueOnlyDeserializer(new SimpleStringSchema())
+            .build();
+
+    DataStream<String> stringDataStream = env.fromSource(source, WatermarkStrategy.noWatermarks() , "Kafka Source");
+*/
 
         /* read data from file */
-//        DataStream<TaxiEvent> taxiEventsDS = env.addSource(new TaxiEventSource(properties)).name( "taxi" );
+        DataStream<TaxiEvent> taxiEventsDS = env.addSource(new TaxiEventSource(properties)).name( "taxi" );
 
         /* Join two types of data */
         DataStream<TaxiLocEvent> taxiLocEventsDS = taxiEventsDS
@@ -93,7 +96,6 @@ public class TaxiEventsAnalysis {
                         Time.hours(1)))
                 .aggregate(new TaxiLocAggregator(), new GetAnomalyWindowFunction())
                 .filter(departuresAnomaly -> departuresAnomaly.getDifference() >= anomalyPeople);
-//                .map(DeparturesAnomaly::toString);
 
         // print to console
         taxiLocStatsDS.print();
