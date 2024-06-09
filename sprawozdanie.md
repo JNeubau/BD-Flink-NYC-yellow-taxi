@@ -188,6 +188,8 @@ public class GetFinalResultWindowFunction extends ProcessWindowFunction<TaxiLocS
 3. Anomalies are considered and filtered [see in Anomalies (Wykrywanie anomalii) section](#anomalies-wykrywanie-anomalii)
 
 ## A delay (Utrzymanie obrazu czasu rzeczywistego – obsługa trybu A)
+Delay can be changed in `flink.properties` file - `DELAY_VERSION` variable.
+
 `EveryEventTimeTrigger` is an overwriten class of Trigger that enables the smallest possible delay. [Use examples](#examples)
 ```
 public class EveryEventTimeTrigger extends Trigger<Object, TimeWindow> {
@@ -212,10 +214,14 @@ public class EveryEventTimeTrigger extends Trigger<Object, TimeWindow> {
 ```
 
 ## C delay (Utrzymanie obrazu czasu rzeczywistego – obsługa trybu C)
+Delay can be changed in `flink.properties` file - `DELAY_VERSION` variable.
+
 A standard `EventTimeTrigger` is used to achive completness trigger [Use examples](#examples)
 
 ## Anomalies (Wykrywanie anomalii)
 - call of `TaxiLocAggregator` (the same which was used in normal processing) and `GetAnomalyWindowFunction` (slightly changed class printing the data with different data model) functions are used to aggregate data. `Filter` is used to choose data which are above chosen parameters.
+
+The anomalies are controlled by parameters. They can be changed in `flink.properties` file. Specificly: `FLINK_ANOMALY_TIME` and `FLINK_ANOMALY_PEOPLE`.
 ```
 DataStream<DeparturesAnomaly> anomalyOutput = taxiLocEventsDS
     .keyBy(TaxiLocEvent::getBorough)
@@ -260,7 +266,13 @@ public class GetAnomalyWindowFunction extends ProcessWindowFunction<TaxiLocStats
 
 ## Examples
 ![ResultsCandAnomalies](images/OutputCandAnomales.png)
-The above piece of output is generated for ***C type*** and ***Anomalie***, both printed to console output (in InteliJ) for ***200 000*** elements in the input data. A ***4-hour*** time window during which the difference between people, who departed the borough and people who arravied to it, is over ***4000*** people is considered an anomaly
+The above piece of output is generated for ***C type*** and ***Anomalie***, both printed to console output (in InteliJ) for ***200 000*** elements in the input data. A ***4-hour*** time window during which the difference between people, who departed the borough and people who arravied to it, is over ***4000*** people is considered an anomaly.
+
+Lines contianing `ResultData` are the output line, while lines contianing `DeparuresAnomalies` are lines with anomalies.
+
+The bigger the anomalies time window, the more probable that the anomalies will be detected.
+
+Similarly, the smaller the difference in number of people, the more anomalies will be detected.
 
 ![ResultsA](images/resultsA.png)
 The above piece is the output generated for ***A type***, printed to the console (in InteliJ). 
