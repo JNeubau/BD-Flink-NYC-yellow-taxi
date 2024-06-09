@@ -28,9 +28,11 @@ mv * ../
 chmod +x *.sh
 ```
 5. Run the  `setup.sh` script to prepare environment
-6. Using `vim flink.properties` create a file and pase the following data, changing `CASSANDRA_HOST`, `BOOTSTRAP_SERVERS`, `taxiData.directoryPath`, `zoneFile.path` according to your data. CASSANDRA_HOST is value of cluster name with '-m' (ex: `pdb-cluster-m`) and BOOTSTRAP_SERVERS is value of cluster name with '-w-0:9092' (ex: `pdb-cluster-w-0:9092`)
+6. Using `vim flink.properties` create a file and pase the following data, changing `CASSANDRA_HOST`, `BOOTSTRAP_SERVERS`, `taxiData.directoryPath`, `zoneFile.path` according to your data. CASSANDRA_HOST is value of cluster name with '-m' (ex: `pdb-cluster-m`) and BOOTSTRAP_SERVERS is value of cluster name with '-w-0:9092' (ex: `pdb-cluster-w-0:9092`).
+
+Example of the file:
 ```
-taxiData.directoryPath = test/
+taxiData.directoryPath = yellow_tripdata_result/
 zoneFile.path = taxi_zone_lookup.csv
 
 taxiEvents.maxElements = 10000

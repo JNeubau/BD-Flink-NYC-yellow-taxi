@@ -104,7 +104,7 @@ public class TaxiEventsAnalysis {
         // save to database
 //        taxiLocStatsDS.addSink(Connectors.getMySQLSink(properties));
 //        Connectors.getCassandraAggSink(taxiLocStatsDS, properties);
-        anomalyOutput.map(DeparturesAnomaly::toString).sinkTo(Connectors.getAnomalySink(properties));
+//        anomalyOutput.map(DeparturesAnomaly::toString).sinkTo(Connectors.getAnomalySink(properties));
 
         env.execute("Taxi Events Analysis");
     }
