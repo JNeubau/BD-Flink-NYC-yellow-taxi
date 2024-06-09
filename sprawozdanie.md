@@ -1,5 +1,7 @@
 # Sprawozdanie - Apache Flink - NYC Yellow Taxi 
 
+### full code available in github repository: https://github.com/JNeubau
+
 ## Prepare the environment (Producent; skrypty inicjujące i zasilający)
 ```
 gcloud dataproc clusters create ${CLUSTER_NAME} \
